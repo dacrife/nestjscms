@@ -6,8 +6,9 @@ export const databaseProviders = [
     useFactory: async () =>
       await createConnection({
         type: 'mongodb',
-        host: 'localhost',
-        database: 'test',
+        host:
+          'mongodb+srv://root:root@cluster1-knttg.mongodb.net/test?retryWrites=true&w=majority',
+        database: 'nestjscms_db',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
