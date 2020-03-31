@@ -9,8 +9,10 @@ export const databaseProviders = [
         host:
           'mongodb+srv://root:root@cluster1-knttg.mongodb.net/test?retryWrites=true&w=majority',
         database: 'nestjscms_db',
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        useNewUrlParser: true,
         synchronize: true,
+        logging: true,
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       }),
   },
 ];
