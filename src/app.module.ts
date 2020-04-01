@@ -6,7 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    ProductModule,
     MongooseModule.forRoot(
       'mongodb+srv://root:root@cluster1-knttg.mongodb.net/nestjs_db?retryWrites=true&w=majority',
       {
@@ -14,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         useNewUrlParser: true,
       },
     ),
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
