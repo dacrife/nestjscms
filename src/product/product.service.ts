@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -9,7 +9,8 @@ import { CreateProductDTO } from './dto/product.dto';
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
+    @Inject('PRODUCT_MODEL')
+    private readonly productModel: Model<Product>,
   ) {}
 
   async getProducts(): Promise<Product[]> {

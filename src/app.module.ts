@@ -2,20 +2,20 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductModule } from './product/product.module';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
+import { Configuration } from './config/config.keys';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [
-    MongooseModule.forRoot(
-      'mongodb+srv://root:root@cluster1-knttg.mongodb.net/nestjs_db?retryWrites=true&w=majority',
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      },
-    ),
-    ProductModule,
-  ],
+  imports: [DatabaseModule, ProductModule, ConfigModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  static port: number | string;
+
+  constructor(private readonly _configService: ConfigService) {
+    AppModule.port = this._configService.get(Configuration.PORT);
+  }
+}
