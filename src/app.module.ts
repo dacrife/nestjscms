@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     ProductModule,
     MongooseModule.forRoot(
-      'mongodb+srv://root:root@cluster1-knttg.mongodb.net/test?retryWrites=true&w=majority',
+      'mongodb+srv://root:root@cluster1-knttg.mongodb.net/nestjs_db?retryWrites=true&w=majority',
       {
         useUnifiedTopology: true,
         useNewUrlParser: true,
