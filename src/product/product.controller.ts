@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Query,
   Param,
+  Put,
 } from '@nestjs/common';
 
 import { CreateProductDTO } from './dto/product.dto';
@@ -38,5 +39,32 @@ export class ProductController {
     const product = await this.productService.getProduct(productID);
     if (!product) throw new NotFoundException('product does not exists');
     return res.status(HttpStatus.OK).json({ product });
+  }
+
+  @Put('/update')
+  async updateProduct(
+    @Res() res,
+    @Body() createdProductDto: CreateProductDTO,
+    @Query('productID') productID,
+  ) {
+    const updatedProduct = await this.productService.updateProduct(
+      productID,
+      createdProductDto,
+    );
+    if (!updatedProduct) throw new NotFoundException('product does not exists');
+    return res.status(HttpStatus.OK).json({
+      message: 'product updated succsesfully',
+      updatedProduct,
+    });
+  }
+
+  @Delete('/delete')
+  async delepeProduct(@Res() res, @Query('productID') productID) {
+    const deletedProduct = await this.productService.deleteProduct(productID);
+    if (!deletedProduct) throw new NotFoundException('product does not exists');
+    return res.status(HttpStatus.OK).json({
+      message: 'product deleted succsesfully',
+      deletedProduct,
+    });
   }
 }
