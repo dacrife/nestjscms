@@ -1,0 +1,11 @@
+{
+  "type": "postgres",
+  "username": "postgres",
+  "password": "admin",
+  "host": "127.0.0.1",
+  "port": 5432,
+  "database": "nestjs_dbpg",
+  "entities": ["src/**/**/*entity{.ts, .js}"],
+  "migrations": ["src/database/migrations/*{.ts, .js}"],
+  "cli": { "migrationsDir": "src/database/migrations" }
+}

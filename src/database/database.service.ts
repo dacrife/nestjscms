@@ -1,15 +1,23 @@
-import * as mongoose from 'mongoose';
+import { ConfigModule } from '../config/config.module';
+import { ConfigService } from '../config/config.service';
+import { ConnectionOptions } from 'typeorm';
+import { Configuration } from '../config/config.keys';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 export const databaseProviders = [
-  {
-    provide: 'DATABASE_CONNECTION',
-    useFactory: (): Promise<typeof mongoose> =>
-      mongoose.connect(
-        'mongodb+srv://root:root@cluster1-knttg.mongodb.net/nestjs_db?retryWrites=true&w=majority',
-        {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        },
-      ),
-  },
+  TypeOrmModule.forRootAsync({
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    async useFactory(config: ConfigService) {
+      return {
+        type: 'postgres' as 'postgres',
+        host: config.get(Configuration.HOST),
+        username: config.get(Configuration.USERNAME),
+        password: config.get(Configuration.PASSWORD),
+        database: config.get(Configuration.DATABASE),
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        migrations: [__dirname + '/migrations/*{.ts, .js}'],
+      } as ConnectionOptions;
+    },
+  }),
 ];
