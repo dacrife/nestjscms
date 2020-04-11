@@ -3,6 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
   UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookRepository } from './book.repository';
@@ -65,7 +66,7 @@ export class BookService {
 
     for (const authorId of book.authors) {
       const authorExists = await this._userRepository.findOne(authorId, {
-        where: { status: 'AVTIVE' },
+        where: { status: 'ACTIVE' },
       });
 
       if (!authorExists) {
@@ -79,7 +80,7 @@ export class BookService {
       );
 
       if (!isAuthor) {
-        throw new UnauthorizedException('Este usuario no es un autor');
+        throw new UnauthorizedException('Este usuario no es un autor fake1');
       }
 
       authors.push(authorExists);
@@ -94,20 +95,18 @@ export class BookService {
     return plainToClass(ReadBookDto, savedBook);
   }
 
-  async createByAuthor(
-    book: Partial<CreateBookDto>,
-    authorId: number,
-  ): Promise<ReadBookDto> {
+  async createByAuthor(book: Partial<CreateBookDto>, authorId: number) {
     const author = await this._userRepository.findOne(authorId, {
       where: { status: 'INACTIVE' },
     });
-
     const isAuthor = author.roles.some(
       (role: Role) => role.name === RoleType.AUTHOR,
     );
 
     if (!isAuthor) {
-      throw new UnauthorizedException('Este usuario no es un autor');
+      throw new ConflictException(
+        'Este usuario no es un autor fake2 Id: ${authorId}',
+      );
     }
 
     const savedBook: Book = await this._bookRepository.save({

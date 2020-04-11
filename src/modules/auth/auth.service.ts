@@ -46,7 +46,6 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('el usuario no existe');
     }
-
     const isMatch = await compare(password, user.password);
 
     if (!isMatch) {

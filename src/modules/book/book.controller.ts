@@ -36,6 +36,7 @@ export class BookController {
   }
 
   @Get('author/:authorId')
+  @UseGuards(AuthGuard())
   getBooksByAuthor(
     @Param('authorId', ParseIntPipe) authorId: number,
   ): Promise<ReadBookDto[]> {
@@ -49,9 +50,9 @@ export class BookController {
     return this.bookService.create(book);
   }
 
+  @Post()
   @Roles(RoleType.AUTHOR)
   @UseGuards(AuthGuard(), RoleGuard)
-  @Post()
   createBookByAuthor(
     @Body() book: Partial<CreateBookDto>,
     @GetUser('id') authorId: number,
